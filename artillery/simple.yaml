@@ -1,0 +1,62 @@
+# config:
+#   target: "http://localhost:3001"
+#   phases:
+#     - duration: 60
+#       arrivalRate: 100
+# scenarios:
+#   - flow:
+#       - get:
+#           url: "/reviews/{{$randomNumber(1, 900000)}/meta"
+
+
+# config:
+#   target: "http://localhost:3001"
+#   phases:
+#     - duration: 1
+#       arrivalRate: 1
+# scenarios:
+#   - flow:
+#       - post:
+#           url: "/reviews"
+#           json:
+            # product_id: 1
+            # rating: 5
+            # summary: "Best Product Ever!!"
+            # body: "Loved this product!!!"
+            # recommend: true
+            # name: "Matt"
+            # email: "example@gmail.com"
+            # photos: []
+            # characteristics: {1: '4'}
+
+
+# config:
+#   target: "http://127.0.0.1:3000"
+#   phases:
+#     - duration: 300
+#       arrivalRate: 10
+#       maxVusers: 50
+
+# config:
+#   target: "http://localhost:3001"
+#   phases:
+#     - duration: 60
+#       arrivalRate: 75
+# scenarios:
+#   - flow:
+#       - get:
+#           url: "/reviews/?product_id={{$randomNumber(1, 900000)}"
+#       - get:
+#           url: "/reviews/{{$randomNumber(1, 900000)}}/meta"
+#       - post:
+#           url: "/reviews"
+#           json:
+#             product_id: 100
+#             rating: 5
+#             summary: "Best Product Ever!!"
+#             body: "Loved this product!!!"
+#             recommend: true
+#             name: "Matt"
+#             email: "example@gmail.com"
+#             photos: []
+#             characteristics: {1: '4'}

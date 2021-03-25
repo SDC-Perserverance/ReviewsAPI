@@ -29,7 +29,7 @@ async function parsePhotos() {
     entry = {
       updateOne: {
         filter: { 'review_id': review_id_photos },
-        update: { $push: {photos: chunk['url']} }
+        update: { $push: { photos: chunk['url'] } }
       }
     }
 
@@ -74,7 +74,7 @@ async function parseReviewChar() {
         }
       }
       container.push(entry);
-      char_obj = {[char_id]: char_value};
+      char_obj = { [char_id]: char_value };
       currentReview = review_id;
     }
 
@@ -88,5 +88,45 @@ async function parseReviewChar() {
   console.log('finished');
 }
 
+async function parseChar() {
+  await client.connect();
+  const database = client.db('ratings_reviews');
+  const reviews = database.collection('reviews');
+  const characteristics = database.collection('characteristics');
+  const meta = database.collection('meta_data');
+  let collection = [];
+
+  for (let j = 1; j < 1000010; j++) {
+    console.log(j);
+    let chars = await characteristics.find({ product_id: j }).toArray();
+    let review_chars = await reviews.find({ product_id: j }).toArray();
+
+    let obj = {
+      product_id: j,
+      ratings: {},
+      characteristics: {}
+    };
+
+
+    for (let i = 0; i < review_chars.length; i++) {
+      if (review_chars[0] && chars[0].characteristics[i]) {
+        obj.characteristics[chars[0].characteristics[i].name] = {
+          id: chars[0].characteristics[i].id,
+          value: 0 + Number(review_chars[0].characteristics[chars[0].characteristics[i].id])
+        }
+      }
+      if (!obj.ratings[review_chars[i].rating]) {
+        obj.ratings[review_chars[i].rating] = 1
+      } else {
+        obj.ratings[review_chars[i].rating]++
+      }
+    }
+
+      await meta.insertOne(obj);
+  }
+}
+
+
+// parseChar();
 // parseReviewChar()
 // parsePhotos();

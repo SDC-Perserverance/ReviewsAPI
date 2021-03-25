@@ -41,6 +41,7 @@ client.connect()
 
 const database = client.db("ratings_reviews");
 const reviews = database.collection('reviews');
+const metaData = database.collection('meta_data');
 const characteristics = database.collection('characteristics');
 
 // <<<<<Database Queries>>>>>>
@@ -54,37 +55,10 @@ async function getAllReviews(params, callback) {
 }
 
 async function getMetaData(productId, callback) {
-  let one, two, three, four, five;
-  let obj = {
-    product_id: productId,
-    ratings: {},
-    characteristics: {}
-  };
-  let chars = await characteristics.find({ product_id: productId }).limit(5).toArray();
-  let review_chars = await reviews.find({ product_id: productId }).limit(5).toArray();
+  let data = await metaData.findOne({ product_id: productId });
 
-
-
-  for (let i = 0; i < chars[0].characteristics.length; i++) {
-    if (review_chars[0]) {
-      obj.characteristics[chars[0].characteristics[i].name] = {
-        id: chars[0].characteristics[i].id,
-        value: 0 + Number(review_chars[0].characteristics[chars[0].characteristics[i].id])
-      }
-    }
-  }
-
-  for (let i = 0; i < review_chars.length; i++) {
-    if (!obj.ratings[review_chars[i].rating]) {
-      obj.ratings[review_chars[i].rating] = 1
-    } else {
-      obj.ratings[review_chars[i].rating]++
-    }
-
-  }
-  callback(null, obj);
+  callback(null, data);
 }
-
 
 async function writeNewReview(params, callback) {
   let lastReview = await reviews.find().sort({ review_id: -1 }).limit(1).toArray();
@@ -131,24 +105,17 @@ async function markAsReported(reviewId, callback) {
   callback(null, data);
 }
 
+
+async function testingMeta(productId) {
+  // let chars = await characteristics.find({ product_id: productId }).limit(5).toArray();
+  // let review_chars = await reviews.find({ product_id: productId }).limit(5).toArray();
+
+  characteristics
+}
+
+
 module.exports.getAllReviews = getAllReviews;
 module.exports.writeNewReview = writeNewReview;
 module.exports.updateHelpful = updateHelpful;
 module.exports.markAsReported = markAsReported;
 module.exports.getMetaData = getMetaData;
-
-
-// {
-//   "product_id": 1,
-//   "rating": 4,
-//   "summary": "Best Product Ever!!",
-//   "body": "I really loved this product",
-//   "recommend": true,
-//   "name": "Mattix",
-//   "email": "example@gmail.com",
-//   "photos": [],
-//   "characteristics": {
-//       "1": 4,
-//       "2": 5
-//   }
-// }
