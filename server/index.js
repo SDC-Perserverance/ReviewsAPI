@@ -7,8 +7,12 @@ let app = express();
 const port = 3001;
 
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.get('/loaderio-5ea1c9216e170afd6aec2004ba9f5517', (req, res) => {
+  res.send('loaderio-5ea1c9216e170afd6aec2004ba9f5517');
+});
 
 app.get('/reviews', async (req, res) => {
   let params = req.query;
@@ -69,3 +73,8 @@ app.put('/reviews/report/:review_id', (req, res) => {
 app.listen(port, () => {
   console.log('listening on port 3001')
 })
+
+
+db.reviews.createIndex(
+  { product_id: 1, review_id: 1}
+)
