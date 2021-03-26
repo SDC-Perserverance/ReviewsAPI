@@ -73,8 +73,3 @@ app.put('/reviews/report/:review_id', (req, res) => {
 app.listen(port, () => {
   console.log('listening on port 3001')
 })
-
-
-db.reviews.createIndex(
-  { product_id: 1, review_id: 1}
-)
